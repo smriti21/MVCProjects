@@ -1,0 +1,47 @@
+﻿@model List<WebGridUI.Models.Project>
+@{
+    ViewBag.Title = "Index";
+    //create object for webgrid to use Webgrid helper
+    var grid = new WebGrid(source: Model, canPage: true, rowsPerPage: 10);
+    //pager
+    grid.Pager(WebGridPagerModes.All);
+}
+
+<h2>Kickoff Project</h2>
+<!--web grid styles starts-->
+<style type="text/css">
+    /*styles for altering rows*/
+    .webgrid-row-style {
+        padding: 3px 7px 2px;
+    }
+
+    .webgrid-alternating-row {
+        background-color: #EAF2D3;
+        padding: 3px 7px 2px;
+    }
+</style>
+<!--web grid styles Ends-->
+<!--web grid display element-->
+<div id="webgrid">
+    @grid.GetHtml(
+            //styles class for table
+            //here i used bootstrap table templates
+            tableStyle: "table table-responsive backcolor",
+            headerStyle: "wedgrid-header",
+            footerStyle: "webgrid-footer",
+            alternatingRowStyle: "webgrid-alternating-row",
+            rowStyle: "webgrid-row-style",
+            //binding table column to the grid
+            columns: grid.Columns(
+            grid.Column(header: "Project Id", columnName: "Id"),
+            grid.Column(header: "Project Name", columnName: "Name"),
+            grid.Column(header: "Project Client", columnName: "Client"),
+            grid.Column(header: "Project Owner", columnName: "Owner"),
+            grid.Column(header: "Edit", format: (item) => @Html.ActionLink("Edit","Edit",new { id = @item.Id })),
+            grid.Column(header: "Details", format: (item) => @Html.ActionLink("Details", "Details", new { id = @item.Id })),
+            grid.Column(header: "Delete", format: (item) => @Html.ActionLink("Delete", "Delete", new { id = @item.Id }))
+            )
+    )
+</div>
+
+@*, format:@<text>@item.Id</text>*@
